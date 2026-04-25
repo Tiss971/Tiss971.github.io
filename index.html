@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mathis Boston — AI & 3D Engineer</title>
+  <title>Mathis Boston — Computer Graphics & 3D Vision Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
+
 <body>
 
   <!-- 3D background -->
@@ -22,16 +28,35 @@
     <div id="avatar"></div>
     <div id="sidebar-info">
       <span class="sidebar-name">Mathis B</span>
-      <span class="sidebar-year">© 2026</span>
     </div>
     <nav id="side-nav">
-      <a href="#profil" class="nav-item" data-fr="Profil" data-en="About">Profil</a>
-      <a href="#competences" class="nav-item" data-fr="Stack" data-en="Stack">Stack</a>
-      <a href="#experience" class="nav-item" data-fr="Expérience" data-en="Experience">Expérience</a>
-      <a href="#projets" class="nav-item" data-fr="Projets" data-en="Projects">Projets</a>
-      <a href="#formation" class="nav-item" data-fr="Formation" data-en="Education">Formation</a>
+      <a href="#profil" class="nav-item">
+        <i class="nav-icon fa-solid fa-user"></i>
+        <span class="nav-label" data-fr="Profil" data-en="About">Profil</span>
+      </a>
+      <a href="#experiences" class="nav-item">
+        <i class="nav-icon fa-solid fa-briefcase"></i>
+        <span class="nav-label" data-fr="Expériences" data-en="Experiences">Expériences</span>
+      </a>
+      <a href="#projets" class="nav-item">
+        <i class="nav-icon fa-solid fa-star"></i>
+        <span class="nav-label" data-fr="Projets" data-en="Projects">Projets</span>
+      </a>
+      <a href="#formation" class="nav-item">
+        <i class="nav-icon fa-solid fa-graduation-cap"></i>
+        <span class="nav-label" data-fr="Formation" data-en="Education">Formation</span>
+      </a>
+      <a href="#competences" class="nav-item">
+        <i class="nav-icon fa-solid fa-code"></i>
+        <span class="nav-label" data-fr="Compétences" data-en="Stack">Compétences</span>
+      </a>
+      <a href="#apropos" class="nav-item">
+        <i class="nav-icon fa-solid fa-circle-info"></i>
+        <span class="nav-label" data-fr="À propos" data-en="About me">À propos</span>
+      </a>
     </nav>
     <div id="sidebar-bottom">
+      <!-- <a href="cv.pdf" class="resume-link mono" target="_blank">CV ↓</a> -->
       <button id="lang-toggle">EN</button>
     </div>
   </aside>
@@ -41,7 +66,8 @@
 
     <!-- HERO -->
     <section id="hero" class="section-hero">
-      <div class="hero-label mono" data-fr="Ingénieur IA & 3D — UTC Compiègne" data-en="AI & 3D Engineer — UTC Compiègne">Ingénieur IA & 3D — UTC Compiègne</div>
+      <div class="hero-label mono" data-fr="Ingénieur Computer Graphics & Vision 3D"
+        data-en="Computer Graphics & 3D Vision Engineer">Ingénieur Computer Graphics & Vision 3D</div>
       <h1 class="hero-name">
         <span class="name-first">Mathis</span>
         <span class="name-last">Boston</span>
@@ -49,84 +75,163 @@
       <div class="hero-contact mono">
         <a href="mailto:bostonmathis@gmail.com">bostonmathis@gmail.com</a>
         <span class="sep">·</span>
-        <a href="https://www.linkedin.com/in/mathis-boston-4591701aa/" target="_blank">LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/mathis-boston/" target="_blank">LinkedIn ↗</a>
       </div>
       <div class="hero-scroll-hint mono">scroll ↓</div>
     </section>
 
     <!-- BIO -->
     <section id="profil" class="section reveal">
-      <div class="section-label mono">01 — <span data-fr="Profil" data-en="About">Profil</span></div>
+      <div class="section-label mono"><span data-fr="Profil" data-en="About">Profil</span></div>
       <div class="section-body">
-        <p class="bio-text" data-fr="Élève ingénieur en Génie Informatique à l'UTC, spécialisé en Intelligence Artificielle et science des données. Intérêt marqué pour le rendering 3D, les modèles de représentation neurale (NeRF, Gaussian Splatting) et les systèmes interactifs temps réel." data-en="Computer Engineering student at UTC, specializing in AI and data science. Deep interest in real-time 3D rendering, neural representation models (NeRF, Gaussian Splatting) and interactive systems.">
-          Élève ingénieur en Génie Informatique à l'UTC, spécialisé en Intelligence Artificielle et science des données. Intérêt marqué pour le rendering 3D, les modèles de représentation neurale (NeRF, Gaussian Splatting) et les systèmes interactifs temps réel.
+        <p class="bio-text"
+          data-fr="Ingénieur-chercheur au sein du Laboratoire de Simulation Interactive (LSI) du CEA depuis 3 ans, je développe des méthodes de reconstruction 3D innovantes. Notamment avec une expérience concrète en implémentation de Gaussian Splatting (C++/CUDA, C#, PyTorch)."
+          data-en="As a research engineer at the CEA's Interactive Simulation Laboratory (LSI) for the past three years, I develop innovative 3D reconstruction methods. This includes practical experience in implementing Gaussian Splatting (C++/CUDA, C#, PyTorch).">
+        </p><br>
+        <p class="bio-text"
+          data-fr="Je cherche un poste alliant développement et recherche appliquée dans les domaines de la vision par ordinateur, le rendu temps réel ou 3DGS."
+          data-en="Seeking a role combining development and applied research in computer vision, real-time rendering or 3DGS.">
         </p>
       </div>
     </section>
 
-    <!-- SKILLS -->
-    <section id="competences" class="section reveal">
-      <div class="section-label mono">02 — <span data-fr="Stack" data-en="Stack">Stack</span></div>
-      <div class="skills-grid">
-        <div class="skill-group">
-          <div class="skill-group-label mono" data-fr="Langages" data-en="Languages">Langages</div>
-          <div class="skill-tags">
-            <span class="tag">Python</span>
-            <span class="tag">C++</span>
-            <span class="tag">JavaScript</span>
-          </div>
-        </div>
-        <div class="skill-group">
-          <div class="skill-group-label mono">3D / Web</div>
-          <div class="skill-tags">
-            <span class="tag">WebGL</span>
-            <span class="tag">Three.js</span>
-            <span class="tag">SparkJS</span>
-          </div>
-        </div>
-        <div class="skill-group">
-          <div class="skill-group-label mono">AI / ML</div>
-          <div class="skill-tags">
-            <span class="tag">PyTorch</span>
-            <span class="tag">TensorFlow</span>
-            <span class="tag">NeRF</span>
-            <span class="tag">3DGS</span>
-          </div>
-        </div>
-        <div class="skill-group">
-          <div class="skill-group-label mono">Data</div>
-          <div class="skill-tags">
-            <span class="tag">SQL</span>
-            <span class="tag">MongoDB</span>
-            <span class="tag">PostgreSQL</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- EXPERIENCE -->
-    <section id="experience" class="section reveal">
-      <div class="section-label mono">03 — <span data-fr="Expérience" data-en="Experience">Expérience</span></div>
+    <section id="experiences" class="section reveal">
+      <div class="section-label mono"><span data-fr="Expériences" data-en="Experiences"></span></div>
       <div class="entries">
 
         <div class="entry">
           <div class="entry-meta">
-            <span class="entry-company">Urbatis</span>
-            <span class="entry-role mono" data-fr="FullStack & Modélisation" data-en="FullStack & Modeling">FullStack & Modélisation</span>
+            <span class="entry-company">CEA — Laboratoire de Simulation Interactive</span>
+            <span class="entry-role mono" 
+              data-fr="Ingénieur chercheur - Gaussian Splatting"
+              data-en="Research Engineer - Gaussian Splatting"></span>
+            <span class="entry-date mono">Nov. 2023 — Nov. 2026</span>
           </div>
-          <p class="entry-desc" data-fr="Modélisation des impacts économiques, environnementaux et sociaux d'un déménagement. Développement web complet (Vue.js, PHP, PostgreSQL)." data-en="Modeling of economic, environmental and social impacts of relocation. Full-stack web development (Vue.js, PHP, PostgreSQL).">
-            Modélisation des impacts économiques, environnementaux et sociaux d'un déménagement. Développement web complet (Vue.js, PHP, PostgreSQL).
-          </p>
+          <div class="entry-desc">
+            <p class="entry-short" data-fr="Expérience en Gaussian Splatting, développement 3DGS, segmentation, inpaiting, démontrateurs Laval Virtual, plugin Unity"
+              data-en="Experience in Gaussian Splatting, 3DGS development, segmentation, inpainting, Laval Virtual demonstrators, Unity plugin">
+            </p>
+            <ul>
+              <li 
+                data-fr="Framework d'intégration de publications de recherche vers leur mise en production"
+                data-en="Framework for integrating research publications into production">
+              </li>
+              <li
+                data-fr="Conception et développement d'une solution end-to-end de génération de scènes 3DGS déployée en environnement client"
+                data-en="Designed and developed an end-to-end 3DGS scene generation solution deployed in client environments">
+              </li>
+              <li 
+                data-fr="Segmentation et inpaiting interactifs de scènes 3DGS"
+                data-en="Interactive segmentation and inpainting of 3DGS scenes"></li>
+              <li>
+                <p 
+                  data-fr="Démonstrateurs techniques pour Laval Virtual:" 
+                  data-en="Technical demonstrators for Laval Virtual:"></p>
+                <ul type="square">
+                  <li  
+                    data-fr="Génération automatique d'assets 3DGS à partir de descriptions textuelles" 
+                    data-en="Automatic 3DGS asset generation from text descriptions"></li>
+                  <li 
+                    data-fr="Rendu large-échelle avec niveau de détails" 
+                    data-en="Large-scale rendering with LOD"></li>
+                </ul>
+              </li>
+              <li 
+                data-fr="Plugin de visualisation 4DGS sous Unity" 
+                data-en="4DGS visualization plugin for Unity"></li>
+            </ul>
+
+          </div>
+          <div class="skill-tags line ">
+            <a href="https://www.linkedin.com/posts/jeremie-legarrec_xdephysics-3dgs-unity3d-ugcPost-7251683023392313345-4IjM?utm_source=share&utm_medium=member_desktop&rcm=ACoAADDKJYUB17dKWUIF7RTQFlGgGI11yIm5sgU." 
+            class="demo-card" target="_blank">
+              <i class="fa-solid fa-video"></i>
+              <div>
+                <div class="demo-title">Démonstrateur Laval Virtual 2024</div>
+                <div class="demo-sub mono">Voir sur LinkedIn ↗</div>
+              </div>
+            </a>
+            <a href="https://fr.linkedin.com/feed/update/urn:li:activity:7444655000078749696?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3B3OVwbIhdTDSbyyv6ZQc2cg%3D%3D" class="demo-card" target="_blank">
+              <i class="fa-solid fa-video"></i>
+              <div>
+                <div class="demo-title">Démonstrateur Laval Virtual 2024</div>
+                <div class="demo-sub mono">Voir sur LinkedIn ↗</div>
+              </div>
+            </a>
+          </div>
+
         </div>
 
         <div class="entry">
           <div class="entry-meta">
-            <span class="entry-company">SNCF</span>
-            <span class="entry-role mono" data-fr="Visualisation KPI" data-en="KPI Dashboard">Visualisation KPI</span>
+            <span class="entry-company">CEA — Laboratoire de Simulation Interactive</span>
+            <span class="entry-role mono" data-fr="Ingénieur chercheur NeRF (Stage)"
+              data-en="NeRF Research Engineer (Intern)">Ingénieur chercheur NeRF (Stage)</span>
+            <span class="entry-date mono">Févr. 2023 — Aoüt 2023</span>
           </div>
-          <p class="entry-desc" data-fr="Structuration des données de maintenance et création d'outils de suivi KPI pour les équipes opérationnelles." data-en="Structuring maintenance data and building KPI monitoring tools for operational teams.">
-            Structuration des données de maintenance et création d'outils de suivi KPI pour les équipes opérationnelles.
-          </p>
+          <div class="entry-desc">
+            <p class="entry-short" data-fr="Experience en NeRF, vidéos 360, Unity VR"
+            data-en="Experience in NeRF, 360 videos, Unity VR">
+            </p>
+            <ul >
+              <li data-fr="Pipeline de transformation et d'exploitation de vidéos 360"
+                data-en="Pipeline for transforming and exploiting 360 videos">Pipeline de transformation et
+                d'exploitation de vidéos 360</li>
+              <li data-fr="Etude et intégration de méthodes NeRF" data-en="Study and integration of NeRF methods">Etude
+                et intégration de méthodes NeRF</li>
+              <li data-fr="Plugin Unity de visualisation en VR" data-en="Unity VR visualization plugin">Plugin Unity de
+                visualisation en VR</li>
+            </ul>
+          </div>
+          
+        </div>
+
+        <div class="entry">
+          <div class="entry-meta">
+            <span class="entry-company">Urbatis</span>
+            <span class="entry-role mono" data-fr="FullStack & Modélisation" data-en="FullStack & Modeling">FullStack &
+              Modélisation</span>
+            <span class="entry-date mono">Sept. 2021 — Févr. 2022</span>
+          </div>
+          <div class="entry-desc">
+            <p class="entry-short" data-fr="Experience en modélisation RSE, développement full-stack Vue.js, PHP, PostgreSQL"
+            data-en="Experience in RSE modeling, full-stack development Vue.js, PHP, PostgreSQL">
+            </p>
+            <ul>
+              <li data-fr="Conception d'un modèle de calcul des impacts financiers, écologiques et sociaux lors du déménagement d'une organisation"
+                data-en="Designed a model for calculating financial, ecological and social impacts of organizational relocation">
+                Conception d'un modèle de calcul des impacts financiers, écologiques et sociaux lors du déménagement
+                d'une organisation</li>
+              <li data-fr="Développement full-stack (Vue.js, PHP, PostgreSQL)"
+                data-en="Full-stack development (Vue.js, PHP, PostgreSQL)">Développement full-stack (Vue.js, PHP,
+                PostgreSQL)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="entry">
+          <div class="entry-meta">
+            <span class="entry-company">SNCF — Technicentre Sud-Est Européen</span>
+            <span class="entry-role mono" data-fr="Data Analyst (Stage)" data-en="Data Analyst (Intern)">Data Analyst
+              (Stage)</span>
+            <span class="entry-date mono">Janv. 2019</span>
+          </div>
+          <div class="entry-desc">
+            <p class="entry-short" data-fr="Experience en analyse de données, Excel scripting, KPI dashboard"
+            data-en="Experience in data analysis, Excel scripting, KPI dashboard">
+            </p>
+            <ul>
+              <li data-fr="Etude des besoins des fichiers de suivi des maintenances"
+                data-en="Analyzed requirements for maintenance tracking files">Etude des besoins des fichiers de suivi
+                des maintenances</li>
+              <li data-fr="Scripting Excel et création de méthodologie pour le suivi journalier"
+                data-en="Excel scripting and methodology creation for daily tracking">Scripting Excel et création de
+                méthodologie pour le suivi journalier</li>
+              <li data-fr="Dashboard détaillant les KPIs des maintenances"
+                data-en="Dashboard detailing maintenance KPIs">Dashboard détaillant les KPIs des maintenances</li>
+            </ul>
+          </div>
         </div>
 
       </div>
@@ -134,15 +239,19 @@
 
     <!-- PROJECTS -->
     <section id="projets" class="section reveal">
-      <div class="section-label mono">04 — <span data-fr="Projets" data-en="Projects">Projets</span></div>
+      <div class="section-label mono"><span data-fr="Projets" data-en="Projects">Projets</span></div>
       <div class="projects-list">
 
         <div class="project-card">
           <div class="project-num mono">001</div>
           <div class="project-info">
-            <div class="project-title" data-fr="Gaussian Splatting / 3DGS" data-en="Gaussian Splatting / 3DGS">Gaussian Splatting / 3DGS</div>
-            <div class="project-desc" data-fr="Rendu 3D temps réel par splats gaussiens." data-en="Real-time 3D rendering via Gaussian splats.">
-              Rendu 3D temps réel par splats gaussiens. Intégration WebGL via SparkJS, pipeline de conversion et viewer interactif.
+            <div class="project-title" data-fr="Gaussian Splatting / 3DGS" data-en="Gaussian Splatting / 3DGS">Gaussian
+              Splatting / 3DGS</div>
+            <div class="project-desc"
+              data-fr="Rendu 3D temps réel par splats gaussiens. Intégration WebGL via SparkJS, pipeline de conversion et viewer interactif."
+              data-en="Real-time 3D rendering via Gaussian splats. WebGL integration via SparkJS, conversion pipeline and interactive viewer.">
+              Rendu 3D temps réel par splats gaussiens. Intégration WebGL via SparkJS, pipeline de conversion et viewer
+              interactif.
             </div>
           </div>
           <div class="project-tag mono">3D · WebGL</div>
@@ -152,8 +261,11 @@
           <div class="project-num mono">002</div>
           <div class="project-info">
             <div class="project-title" data-fr="NeRF Experiments" data-en="NeRF Experiments">NeRF Experiments</div>
-            <div class="project-desc" data-fr="Exploration de représentations de scènes 3D via réseaux de neurones implicites. Comparaison de variantes (NeRF, Instant-NGP)." data-en="Exploration of 3D scene representations via implicit neural networks. Comparison of variants (NeRF, Instant-NGP).">
-              Exploration de représentations de scènes 3D via réseaux de neurones implicites. Comparaison de variantes (NeRF, Instant-NGP).
+            <div class="project-desc"
+              data-fr="Exploration de représentations de scènes 3D via réseaux de neurones implicites. Comparaison de variantes (NeRF, Instant-NGP)."
+              data-en="Exploration of 3D scene representations via implicit neural networks. Comparison of variants (NeRF, Instant-NGP).">
+              Exploration de représentations de scènes 3D via réseaux de neurones implicites. Comparaison de variantes
+              (NeRF, Instant-NGP).
             </div>
           </div>
           <div class="project-tag mono">AI · 3D</div>
@@ -162,9 +274,13 @@
         <div class="project-card">
           <div class="project-num mono">003</div>
           <div class="project-info">
-            <div class="project-title" data-fr="Open Data — Cartographie" data-en="Open Data — Mapping">Open Data — Cartographie</div>
-            <div class="project-desc" data-fr="Visualisation cartographique interactive (données sismiques, données ouvertes). Pipeline ETL et rendu SVG/Canvas." data-en="Interactive mapping visualization (seismic data, open data). ETL pipeline and SVG/Canvas rendering.">
-              Visualisation cartographique interactive (données sismiques, données ouvertes). Pipeline ETL et rendu SVG/Canvas.
+            <div class="project-title" data-fr="Open Data — Cartographie" data-en="Open Data — Mapping">Open Data —
+              Cartographie</div>
+            <div class="project-desc"
+              data-fr="Visualisation cartographique interactive (données sismiques, données ouvertes). Pipeline ETL et rendu SVG/Canvas."
+              data-en="Interactive mapping visualization (seismic data, open data). ETL pipeline and SVG/Canvas rendering.">
+              Visualisation cartographique interactive (données sismiques, données ouvertes). Pipeline ETL et rendu
+              SVG/Canvas.
             </div>
           </div>
           <div class="project-tag mono">Data · Viz</div>
@@ -175,33 +291,108 @@
 
     <!-- EDUCATION + LANGUAGES -->
     <section id="formation" class="section reveal">
-      <div class="section-label mono">05 — <span data-fr="Formation" data-en="Education">Formation</span></div>
+      <div class="section-label mono"><span data-fr="Formation" data-en="Education">Formation</span></div>
       <div class="edu-grid">
         <div class="edu-item">
           <span class="edu-school">UTC Compiègne</span>
-          <span class="edu-detail mono" data-fr="Génie Informatique · IA & Data" data-en="Computer Engineering · AI & Data">Génie Informatique · IA & Data</span>
-        </div>
-        <div class="edu-item">
-          <span class="edu-school" data-fr="Erasmus — Saragosse" data-en="Erasmus — Zaragoza">Erasmus — Saragosse</span>
-          <span class="edu-detail mono" data-fr="Échange académique" data-en="Academic exchange">Échange académique</span>
-        </div>
-        <div class="edu-item">
-          <span class="edu-school" data-fr="Baccalauréat S" data-en="Scientific Baccalaureate">Baccalauréat S</span>
-          <span class="edu-detail mono accent" data-fr="Mention Très Bien" data-en="Highest Honors">Mention Très Bien</span>
-        </div>
-      </div>
+          <span class="edu-date mono">2020 — 2023</span>
+          <span class="edu-detail mono" data-fr="Diplôme d'ingénieur — Génie Informatique · IA & Data"
+            data-en="Engineering Degree — Computer Engineering · AI & Data">Diplôme d'ingénieur — Génie Informatique ·
+            IA & Data</span>
 
-      <div class="lang-row">
-        <span class="lang-item"><span class="lang-name" data-fr="Français" data-en="French">Français</span> <span class="lang-level mono">C2</span></span>
-        <span class="lang-sep">—</span>
-        <span class="lang-item"><span class="lang-name" data-fr="Anglais" data-en="English">Anglais</span> <span class="lang-level mono">B2</span></span>
-        <span class="lang-sep">—</span>
-        <span class="lang-item"><span class="lang-name" data-fr="Espagnol" data-en="Spanish">Espagnol</span> <span class="lang-level mono">B2</span></span>
+        </div>
+        <div class="edu-item">
+          <span class="edu-school">UTC Compiègne</span>
+          <span class="edu-date mono">2018 — 2020</span>
+          <span class="edu-detail mono" data-fr="Cycle préparatoire" data-en="Preparatory Cycle">Cycle
+            préparatoire</span>
+
+        </div>
       </div>
     </section>
 
+    <!-- SKILLS -->
+    <section id="competences" class="section reveal">
+      <div class="section-label mono"><span data-fr="Compétences" data-en="Stack">Compétences</span></div>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <div class="skill-group-label mono" data-fr="Langages" data-en="Languages">Langages</div>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">C++</span>
+            <span class="tag">C#</span>
+            <span class="tag">JavaScript</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label mono">AI / Vision</div>
+          <div class="skill-tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">DINOv3</span>
+            <span class="tag">CLIP</span>
+            <span class="tag">SAM</span>
+            <span class="tag">YOLO</span>
+            <span class="tag">3DGS</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label mono">3D / Tools</div>
+          <div class="skill-tags">
+            <span class="tag">Unity</span>
+            <span class="tag">OpenUSD</span>
+            <span class="tag">Omniverse</span>
+            <span class="tag">Open3D</span>
+          </div>
+        </div>
+        <div class="skill-group">
+          <div class="skill-group-label mono">Soft skills</div>
+          <div class="skill-tags">
+            <span class="tag">Travail inter/intra équipe</span>
+            <span class="tag">Présentation en salon professionnel</span>
+            <span class="tag">Encadrement</span>
+          </div>
+      </div>
+    </section>
+
+    <!-- ABOUT ME -->
+<section id="apropos" class="section reveal">
+  <div class="section-label mono"><span data-fr="À propos" data-en="About">À propos</span></div>
+  
+  <div class="apropos-grid">
+    
+    <div class="apropos-block">
+      <div class="apropos-block-label mono" data-fr="Langues" data-en="Languages">Langues</div>
+      <div class="hobbies-row">
+        <span class="hobby-item mono">
+          <span data-fr="Français" data-en="French">Français</span>
+          <span class="chip-level" data-fr="Langue Maternelle" data-en="Native">Langue Maternelle</span>
+        </span>
+        <span class="hobby-item mono">
+          <span data-fr="Anglais" data-en="English">Anglais</span>
+          <span class="chip-level" data-fr="Avancé" data-en="Advanced">Avancé</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="apropos-sep"></div>
+
+    <div class="apropos-block">
+      <div class="apropos-block-label mono" data-fr="Intérêts" data-en="Hobbies">Intérêts</div>
+      <div class="hobbies-row">
+        <span class="hobby-item mono" data-fr="Basket (8 ans)" data-en="Basketball (8 years)">Basket (8 ans)</span>
+        <span class="hobby-item mono" data-fr="Course à pied" data-en="Running">Course à pied</span>
+        <span class="hobby-item mono" data-fr="Veille technologique" data-en="Tech watch">Veille technologique</span>
+        <span class="hobby-item mono" data-fr="Musique & histoire" data-en="Music & history">Musique</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+    <section id="dummy" class="section reveal" style="height: 400px;"></section>
+
     <footer class="footer mono">
-      <span data-fr="Construit avec Three.js & SparkJS" data-en="Built with Three.js & SparkJS">Construit avec Three.js & SparkJS</span>
+      <span class="sidebar-year">© 2026</span>
     </footer>
 
   </main>
@@ -216,4 +407,5 @@
 </script>
   <script type="module" src="main.js"></script>
 </body>
+
 </html>
