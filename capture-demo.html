@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Capture webcam en direct, segmentation temps réel et reconstruction 3D approximative — 100% dans le navigateur." />
+  <meta name="theme-color" content="#0c0c0e" />
+  <title>Capture live → segmentation → reconstruction 3D — Mathis Boston</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { overflow: hidden; }
+
+    #demo-container { position: fixed; inset: 0; z-index: 0; cursor: grab; }
+    #demo-container:active { cursor: grabbing; }
+    #demo-container.hidden { display: none; }
+
+    #demo-back {
+      position: fixed; top: 24px; left: 24px; z-index: 20;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border: 1px solid var(--border2); border-radius: 8px;
+      background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    #demo-back:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ---- Center stage (webcam / capture states) ---- */
+    #demo-stage {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 24px; text-align: center; padding: 24px;
+      background: var(--bg);
+    }
+    #demo-stage.hidden { display: none; }
+
+    #demo-video-wrap {
+      position: relative;
+      width: min(520px, 90vw);
+      aspect-ratio: 4 / 3;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border2);
+      background: var(--surface);
+    }
+    #demo-video, #demo-mask-canvas {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1); /* mirror, feels natural */
+    }
+    #demo-mask-canvas { pointer-events: none; opacity: 0.55; }
+
+    #demo-progress-ring {
+      position: absolute; inset: 0;
+      pointer-events: none;
+    }
+
+    .demo-title { font-family: 'DM Serif Display', serif; font-size: 26px; max-width: 480px; }
+    .demo-subtitle { font-size: 14px; color: var(--muted); max-width: 460px; line-height: 1.5; }
+
+    .demo-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .demo-btn:hover { background: var(--accent); color: var(--bg); }
+    .demo-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #demo-error {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: #ff8080;
+      max-width: 440px;
+    }
+
+    /* ---- Result overlay ---- */
+    #demo-panel {
+      position: fixed; bottom: 24px; left: 24px; z-index: 20;
+      padding: 16px 20px; border: 1px solid var(--border2); border-radius: 10px;
+      background: var(--surface); max-width: 340px;
+    }
+    #demo-panel.hidden { display: none; }
+    #demo-panel .demo-panel-title { font-family: 'DM Serif Display', serif; font-size: 18px; margin-bottom: 8px; }
+    #demo-panel .demo-panel-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-bottom: 12px; }
+    #demo-stats { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--accent); display: flex; flex-direction: column; gap: 4px; }
+    #demo-stats span b { color: var(--text); }
+    #demo-restart {
+      margin-top: 12px; width: 100%;
+    }
+
+    #demo-hint {
+      position: fixed; bottom: 24px; right: 24px; z-index: 20;
+      font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted);
+    }
+    #demo-hint.hidden { display: none; }
+  </style>
+</head>
+
+<body>
+
+  <a id="demo-back" href="index.html#projets">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Retour au portfolio</span>
+  </a>
+
+  <!-- Idle / permission / capturing stage -->
+  <div id="demo-stage">
+    <div class="demo-title">Scan-toi en 3D, en direct</div>
+    <div class="demo-subtitle" id="demo-instructions">
+      Ta webcam capture ~12 secondes pendant que tu tournes sur toi-même. Un modèle de segmentation isole
+      ton silhouette du fond en temps réel, et une reconstruction 3D approximative est générée — tout se
+      passe dans ton navigateur, rien n'est envoyé sur un serveur.
+    </div>
+
+    <div id="demo-video-wrap">
+      <video id="demo-video" autoplay muted playsinline></video>
+      <canvas id="demo-mask-canvas"></canvas>
+      <svg id="demo-progress-ring" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(200,240,77,0.15)" stroke-width="3"/>
+        <circle id="demo-progress-arc" cx="50" cy="50" r="46" fill="none" stroke="var(--accent)"
+          stroke-width="3" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round"
+          transform="rotate(-90 50 50)"/>
+      </svg>
+    </div>
+
+    <button id="demo-start-btn" class="demo-btn">Activer la webcam</button>
+    <div id="demo-error"></div>
+  </div>
+
+  <!-- 3D reconstruction viewer -->
+  <div id="demo-container" class="hidden"></div>
+
+  <div id="demo-panel" class="hidden">
+    <div class="demo-panel-title">Reconstruction en direct</div>
+    <div class="demo-panel-desc">
+      Nuage de points placé heuristiquement à partir des pixels segmentés + angle de rotation estimé
+      (pas de training par descente de gradient — voir <a href=".docs/CAPTURE_DEMO.md" style="color: var(--accent);">CAPTURE_DEMO.md</a>).
+    </div>
+    <div id="demo-stats">
+      <span>FPS: <b id="stat-fps">—</b></span>
+      <span>Points: <b id="stat-count">—</b></span>
+      <span>Frames capturées: <b id="stat-frames">—</b></span>
+    </div>
+    <button id="demo-restart" class="demo-btn">Recommencer</button>
+  </div>
+
+  <div id="demo-hint" class="hidden">glisser pour orbiter · molette pour zoomer</div>
+
+  <script type="importmap">
+{
+  "imports": {
+    "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.js",
+    "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs"
+  }
+}
+</script>
+  <script type="module" src="capture-demo.js"></script>
+</body>
+
+</html>
