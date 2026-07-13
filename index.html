@@ -4,6 +4,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Mathis Boston — Computer Graphics & 3D Vision Engineer. Research engineer skilled in Gaussian Splatting, NeRF, real-time rendering and AI-driven 3D pipelines." />
+  <meta name="theme-color" content="#0c0c0e" />
+  <meta property="og:title" content="Mathis Boston — Computer Graphics & 3D Vision Engineer" />
+  <meta property="og:description" content="Research engineer skilled in Gaussian Splatting, NeRF, real-time rendering and AI-driven 3D pipelines." />
+  <meta property="og:type" content="profile" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta name="twitter:card" content="summary" />
   <title>Mathis Boston — Computer Graphics & 3D Vision Engineer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -17,6 +24,8 @@
 
 <body>
 
+  <a class="skip-link" href="#content">Skip to content</a>
+
   <!-- 3D background -->
   <div id="three-container"></div>
 
@@ -25,11 +34,11 @@
 
   <!-- Sidebar fixed left -->
   <aside id="sidebar">
-    <div id="avatar"></div>
+    <div id="avatar" tabindex="0" aria-label="3D avatar"></div>
     <div id="sidebar-info">
       <span class="sidebar-name">Mathis B</span>
     </div>
-    <nav id="side-nav">
+    <nav id="side-nav" role="navigation" aria-label="Primary navigation">
       <a href="#profil" class="nav-item">
         <i class="nav-icon fa-solid fa-user"></i>
         <span class="nav-label" data-fr="Profil" data-en="About">Profil</span>
@@ -75,7 +84,7 @@
       <div class="hero-contact mono">
         <a href="mailto:bostonmathis@gmail.com">bostonmathis@gmail.com</a>
         <span class="sep">·</span>
-        <a href="https://www.linkedin.com/in/mathis-boston/" target="_blank">LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/mathis-boston/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
       </div>
       <div class="hero-scroll-hint mono">scroll ↓</div>
     </section>
@@ -144,15 +153,15 @@
 
           </div>
           <div class="skill-tags line ">
-            <a href="https://www.linkedin.com/posts/jeremie-legarrec_xdephysics-3dgs-unity3d-ugcPost-7251683023392313345-4IjM?utm_source=share&utm_medium=member_desktop&rcm=ACoAADDKJYUB17dKWUIF7RTQFlGgGI11yIm5sgU." 
-            class="demo-card" target="_blank">
+            <a href="https://www.linkedin.com/feed/update/urn:li:activity:7444655000078749696"
+            class="demo-card" target="_blank" rel="noopener noreferrer">
               <i class="fa-solid fa-video"></i>
               <div>
-                <div class="demo-title">Démonstrateur Laval Virtual 2024</div>
+                <div class="demo-title">Démonstrateur Laval Virtual 2026</div>
                 <div class="demo-sub mono">Voir sur LinkedIn ↗</div>
               </div>
             </a>
-            <a href="https://fr.linkedin.com/feed/update/urn:li:activity:7444655000078749696?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base%3B3OVwbIhdTDSbyyv6ZQc2cg%3D%3D" class="demo-card" target="_blank">
+            <a href="https://www.linkedin.com/posts/jeremie-legarrec_xdephysics-3dgs-unity3d-ugcPost-7251683023392313345" class="demo-card" target="_blank" rel="noopener noreferrer">
               <i class="fa-solid fa-video"></i>
               <div>
                 <div class="demo-title">Démonstrateur Laval Virtual 2024</div>
@@ -245,16 +254,25 @@
         <div class="project-card">
           <div class="project-num mono">001</div>
           <div class="project-info">
-            <div class="project-title" data-fr="Gaussian Splatting / 3DGS" data-en="Gaussian Splatting / 3DGS">Gaussian
-              Splatting / 3DGS</div>
+            <div class="project-title" data-fr="Scan 3D live par webcam" data-en="Live webcam 3D scan">Scan 3D live
+              par webcam</div>
             <div class="project-desc"
-              data-fr="Rendu 3D temps réel par splats gaussiens. Intégration WebGL via SparkJS, pipeline de conversion et viewer interactif."
-              data-en="Real-time 3D rendering via Gaussian splats. WebGL integration via SparkJS, conversion pipeline and interactive viewer.">
-              Rendu 3D temps réel par splats gaussiens. Intégration WebGL via SparkJS, pipeline de conversion et viewer
-              interactif.
+              data-fr="Capture webcam en direct, segmentation temps réel (MediaPipe) et reconstruction 3D heuristique — 100% dans le navigateur, sans backend."
+              data-en="Live webcam capture, real-time segmentation (MediaPipe) and heuristic 3D reconstruction — 100% in-browser, no backend.">
+              Capture webcam en direct, segmentation temps réel (MediaPipe) et reconstruction 3D heuristique —
+              100% dans le navigateur, sans backend.
             </div>
           </div>
-          <div class="project-tag mono">3D · WebGL</div>
+          <div class="project-tag mono">3D · WebGL · MediaPipe</div>
+          <div class="skill-tags line">
+            <a href="capture-demo.html" class="demo-card">
+              <i class="fa-solid fa-cube"></i>
+              <div>
+                <div class="demo-title">Démo interactive</div>
+                <div class="demo-sub mono">Scanne-toi en direct ↗</div>
+              </div>
+            </a>
+          </div>
         </div>
 
         <div class="project-card">
