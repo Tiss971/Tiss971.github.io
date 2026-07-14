@@ -57,7 +57,13 @@
     #demo-mask-canvas { pointer-events: none; opacity: 0.55; }
 
     #demo-progress-ring {
-      position: absolute; inset: 0;
+      /* square sized to the wrap's (shorter) height, centered, so the
+         circular ring always fits and is never cropped by the 4:3 frame */
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      height: 100%;
+      aspect-ratio: 1 / 1;
       pointer-events: none;
     }
 
@@ -105,6 +111,31 @@
       font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted);
     }
     #demo-hint.hidden { display: none; }
+
+    /* ---- Debug filmstrip (per-frame inputs + estimated angle) ---- */
+    #demo-filmstrip {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 25;
+      display: flex; gap: 10px; overflow-x: auto;
+      padding: 12px 16px;
+      background: rgba(8, 10, 16, 0.72);
+      border-bottom: 1px solid var(--border2);
+    }
+    @media (prefers-color-scheme: light) {
+      #demo-filmstrip { background: rgba(234, 238, 245, 0.82); }
+    }
+    #demo-filmstrip.hidden { display: none; }
+    .film-frame { flex: 0 0 auto; text-align: center; }
+    .film-frame canvas {
+      width: 92px; height: 92px; display: block;
+      border-radius: 8px; border: 1px solid var(--border2);
+      background: #000;
+    }
+    .film-label {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      color: var(--muted); margin-top: 5px; line-height: 1.4;
+    }
+    .film-label b { color: var(--accent); }
+    .film-label .flow { color: var(--muted2); }
   </style>
 </head>
 
@@ -119,7 +150,7 @@
   <div id="demo-stage">
     <div class="demo-title">Scan-toi en 3D, en direct</div>
     <div class="demo-subtitle" id="demo-instructions">
-      Ta webcam capture ~12 secondes pendant que tu tournes sur toi-même. Un modèle de segmentation isole
+      Ta webcam capture quelques secondes pendant que tu tournes sur toi-même. Un modèle de segmentation isole
       ton silhouette du fond en temps réel, et une reconstruction 3D approximative est générée — tout se
       passe dans ton navigateur, rien n'est envoyé sur un serveur.
     </div>
@@ -128,7 +159,7 @@
       <video id="demo-video" autoplay muted playsinline></video>
       <canvas id="demo-mask-canvas"></canvas>
       <svg id="demo-progress-ring" viewBox="0 0 100 100">
-        <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(200,240,77,0.15)" stroke-width="3"/>
+        <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(76,194,255,0.15)" stroke-width="3"/>
         <circle id="demo-progress-arc" cx="50" cy="50" r="46" fill="none" stroke="var(--accent)"
           stroke-width="3" stroke-dasharray="289" stroke-dashoffset="289" stroke-linecap="round"
           transform="rotate(-90 50 50)"/>
@@ -145,16 +176,21 @@
   <div id="demo-panel" class="hidden">
     <div class="demo-panel-title">Reconstruction en direct</div>
     <div class="demo-panel-desc">
-      Nuage de points placé heuristiquement à partir des pixels segmentés + angle de rotation estimé
-      (pas de training par descente de gradient — voir <a href=".docs/CAPTURE_DEMO.md" style="color: var(--accent);">CAPTURE_DEMO.md</a>).
+      Visual hull sculpté à partir des silhouettes segmentées (angle par head-pose), rendu en vraies
+      gaussiennes via SparkJS — pas de training par descente de gradient (voir <a href=".docs/CAPTURE_DEMO.md" style="color: var(--accent);">CAPTURE_DEMO.md</a>).
     </div>
     <div id="demo-stats">
       <span>FPS: <b id="stat-fps">—</b></span>
       <span>Points: <b id="stat-count">—</b></span>
       <span>Frames capturées: <b id="stat-frames">—</b></span>
     </div>
+    <button id="demo-frames-btn" class="demo-btn" style="width:100%; margin-top:12px;">Voir les frames (debug)</button>
+    <button id="demo-export-btn" class="demo-btn" style="width:100%; margin-top:8px;">Exporter (COLMAP)</button>
     <button id="demo-restart" class="demo-btn">Recommencer</button>
   </div>
+
+  <!-- Debug: per-frame thumbnails + estimated angle / source -->
+  <div id="demo-filmstrip" class="hidden"></div>
 
   <div id="demo-hint" class="hidden">glisser pour orbiter · molette pour zoomer</div>
 
@@ -162,7 +198,8 @@
 {
   "imports": {
     "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.js",
-    "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs"
+    "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs",
+    "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.0.0/spark.module.js"
   }
 }
 </script>
