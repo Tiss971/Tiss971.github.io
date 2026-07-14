@@ -4,29 +4,50 @@
    ========================================= */
 
 :root {
-  --bg:        #0c0c0e;
-  --surface:   #111116;
-  --text:      #e8e6e0;
-  --muted:     #9090a0;
-  --muted2:    #606070;
-  --accent:    #c8f04d;   /* electric chartreuse */
-  --accent2:   #8bffc8;
+  --bg:        #0a0c12;
+  --surface:   #10131c;
+  --text:      #e6e9f2;
+  --muted:     #8790a8;
+  --muted2:    #545c74;
+  --accent:    #4cc2ff;   /* electric azure — depth / vision */
+  --accent2:   #9d7bff;   /* neural violet */
   --border:    rgba(255,255,255,0.07);
-  --border2:   rgba(255,255,255,0.12);
+  --border2:   rgba(255,255,255,0.13);
   --sidebar-w: 220px;
+}
+
+/* Skip link for keyboard users (visible on focus) */
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 6px;
+  z-index: 9999;
+  transform: translateY(-140%);
+  transition: transform 0.18s ease;
+  text-decoration: none;
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 3px solid var(--accent);
 }
 
 @media (prefers-color-scheme: light) {
   :root {
-    --bg:      #f5f3ee;
-    --surface: #eeece8;
-    --text:    #0c0c0e;
-    --muted:   #888884;
-    --muted2:  #ccccc8;
-    --accent:  #5a7a00;
-    --accent2: #00885a;
+    --bg:      #eaeef5;
+    --surface: #e0e5ef;
+    --text:    #0b0e16;
+    --muted:   #5c6478;
+    --muted2:  #b2bacb;
+    --accent:  #0d63b8;   /* deep azure (AA on light) */
+    --accent2: #5a3fc0;   /* violet */
     --border:  rgba(0,0,0,0.07);
-    --border2: rgba(0,0,0,0.14);
+    --border2: rgba(0,0,0,0.13);
   }
 }
 
@@ -432,17 +453,24 @@ body {
 .projects-list { display: flex; flex-direction: column; gap: 0; }
 
 .project-card {
-  padding: 28px 0;
+  /* horizontal space is reserved at rest (margin cancels padding) so the
+     card never resizes on hover; radius is present but invisible until the
+     clay surface + shadow fade in */
+  padding: 28px 16px;
+  margin: 0 -16px;
   border-top: 1px solid var(--border);
   display: grid;
   grid-template-columns: 48px 1fr auto;
   gap: 24px;
   align-items: start;
   cursor: default;
-  transition: background 0.2s ease;
+  border-radius: var(--clay-radius);
+  transition: background 0.25s ease,
+              box-shadow 0.25s var(--clay-ease),
+              transform 0.2s var(--clay-ease);
 }
 .project-card:last-child { border-bottom: 1px solid var(--border); }
-.project-card:hover { background: var(--surface); margin: 0 -16px; padding-left: 16px; padding-right: 16px; border-radius: 6px; border-color: transparent; }
+.project-card:hover { border-color: transparent; }
 
 .project-num {
   font-size: 10px;
@@ -758,4 +786,190 @@ body {
 html, body {
   overflow-x: hidden;
   max-width: 100%;
+}
+
+/* =========================================
+   CLAYMORPHISM LAYER
+   Soft 3D "clay" surfaces: dual inner + outer
+   shadows, generous radii, squish-on-press.
+   Adapted to the editorial dark theme (keeps
+   DM Serif/Mono + chartreuse accent).
+   ========================================= */
+:root {
+  --clay-radius:    26px;
+  --clay-radius-sm: 16px;
+  --clay-surface:   #1a1f2e;   /* cool, clearly raised off the bg */
+  --clay-ease:      cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --clay-shadow:
+    9px 9px 22px rgba(0,0,0,0.6),
+    -6px -6px 16px rgba(120,150,200,0.06),
+    inset 3px 3px 6px rgba(150,180,230,0.09),
+    inset -5px -5px 11px rgba(0,0,0,0.5);
+  --clay-shadow-sm:
+    5px 5px 13px rgba(0,0,0,0.55),
+    -4px -4px 10px rgba(120,150,200,0.05),
+    inset 2px 2px 4px rgba(150,180,230,0.08),
+    inset -3px -3px 6px rgba(0,0,0,0.45);
+  --clay-pressed:
+    inset 4px 4px 10px rgba(0,0,0,0.55),
+    inset -4px -4px 10px rgba(150,180,230,0.06);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --clay-surface: #e6ebf4;
+    --clay-shadow:
+      9px 9px 20px rgba(60,80,120,0.16),
+      -7px -7px 16px rgba(255,255,255,0.95),
+      inset 3px 3px 6px rgba(255,255,255,0.85),
+      inset -5px -5px 11px rgba(60,80,120,0.08);
+    --clay-shadow-sm:
+      5px 5px 12px rgba(60,80,120,0.13),
+      -4px -4px 10px rgba(255,255,255,0.95),
+      inset 2px 2px 4px rgba(255,255,255,0.8),
+      inset -3px -3px 6px rgba(60,80,120,0.07);
+    --clay-pressed:
+      inset 4px 4px 9px rgba(60,80,120,0.18),
+      inset -4px -4px 9px rgba(255,255,255,0.9);
+  }
+}
+
+/* Interactive clay chips: tags, project tags */
+.tag,
+.project-tag {
+  border: none;
+  border-radius: var(--clay-radius-sm);
+  background: var(--clay-surface);
+  box-shadow: var(--clay-shadow-sm);
+  padding: 8px 15px;
+  transition: box-shadow 0.25s var(--clay-ease),
+              transform 0.18s var(--clay-ease),
+              color 0.2s ease;
+}
+.tag:hover,
+.project-tag:hover {
+  color: var(--accent);
+  box-shadow: var(--clay-shadow);
+  transform: translateY(-1px);
+}
+.tag:active,
+.project-tag:active {
+  transform: scale(0.96);
+  box-shadow: var(--clay-pressed);
+}
+.tag.smaller { padding: 5px 11px; }
+
+/* Clay pills: hobbies */
+.hobby-item {
+  border: none;
+  background: var(--clay-surface);
+  box-shadow: var(--clay-shadow-sm);
+  transition: box-shadow 0.25s var(--clay-ease),
+              transform 0.18s var(--clay-ease),
+              color 0.2s ease;
+}
+.hobby-item:hover {
+  background: var(--clay-surface);
+  color: var(--accent);
+  box-shadow: var(--clay-shadow);
+  transform: translateY(-1px);
+}
+.hobby-item:active {
+  transform: scale(0.96);
+  box-shadow: var(--clay-pressed);
+}
+
+/* Chunky clay card: interactive demo link */
+.demo-card {
+  border: none;
+  border-radius: var(--clay-radius);
+  background: var(--clay-surface);
+  box-shadow: var(--clay-shadow);
+  padding: 16px 22px;
+  transition: box-shadow 0.25s var(--clay-ease),
+              transform 0.2s var(--clay-ease),
+              color 0.2s ease;
+}
+.demo-card:hover {
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow:
+    10px 10px 24px rgba(0,0,0,0.55),
+    -6px -6px 16px rgba(255,255,255,0.05),
+    inset 2px 2px 5px rgba(255,255,255,0.06),
+    inset -4px -4px 9px rgba(0,0,0,0.45);
+}
+.demo-card:active { transform: scale(0.97); box-shadow: var(--clay-pressed); }
+
+/* Clay avatar puck */
+#avatar {
+  border: none;
+  box-shadow: var(--clay-shadow);
+}
+
+/* Clay language toggle button */
+#lang-toggle {
+  border: none;
+  border-radius: var(--clay-radius-sm);
+  background: var(--clay-surface);
+  box-shadow: var(--clay-shadow-sm);
+  transition: box-shadow 0.25s var(--clay-ease),
+              transform 0.18s var(--clay-ease),
+              color 0.2s ease;
+}
+#lang-toggle:hover {
+  color: var(--accent);
+  border-color: transparent;
+  box-shadow: var(--clay-shadow);
+}
+#lang-toggle:active {
+  transform: scale(0.95);
+  box-shadow: var(--clay-pressed);
+}
+
+/* Clay pull-quote block */
+.entry-short {
+  border-left: none;
+  border-radius: var(--clay-radius);
+  background: var(--clay-surface);
+  box-shadow: var(--clay-shadow-sm);
+  padding: 16px 22px;
+}
+
+/* Project row lifts into a clay card on hover (no size/shape change —
+   only the surface, shadow and a small vertical lift fade in) */
+.project-card:hover {
+  background: var(--clay-surface);
+  border-color: transparent;
+  box-shadow: var(--clay-shadow);
+  transform: translateY(-2px);
+}
+
+/* Active nav item lifts into a small clay pill */
+.nav-item {
+  transition: color 0.2s ease, background 0.2s ease,
+              box-shadow 0.25s var(--clay-ease);
+}
+.nav-item.active {
+  background: var(--clay-surface);
+  box-shadow: var(--clay-shadow-sm);
+  border-radius: var(--clay-radius-sm);
+  padding: 4px 12px;
+  margin-left: -12px;
+}
+.nav-item.active::before { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tag, .project-tag, .hobby-item, .demo-card, #lang-toggle {
+    transition: color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tag:hover, .project-tag:hover, .hobby-item:hover,
+  .demo-card:hover, .project-card:hover {
+    transform: none;
+  }
+  .tag:active, .project-tag:active, .hobby-item:active,
+  .demo-card:active, #lang-toggle:active {
+    transform: none;
+  }
 }
