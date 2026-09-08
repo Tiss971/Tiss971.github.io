@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    try {
+      var t = localStorage.getItem('theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
+  <meta name="description" content="Avatar de tête animable en 3D gaussian splatting, généré one-shot depuis une photo (LAM) et rendu en temps réel — 100% dans le navigateur." />
+  <meta name="theme-color" content="#0c0c0e" />
+  <title>Avatar 3D animable (LAM) — Mathis Boston</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    body { overflow: hidden; }
+
+    #avatar-container { position: fixed; inset: 0; z-index: 0; cursor: grab; background: #0c0c0e; }
+    #avatar-container:active { cursor: grabbing; }
+
+    #demo-back {
+      position: fixed; top: 24px; left: 24px; z-index: 20;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border: 1px solid var(--border2); border-radius: 8px;
+      background: var(--surface); color: var(--text); text-decoration: none; font-size: 13px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    #demo-back:hover { border-color: var(--accent); color: var(--accent); }
+
+    #demo-panel {
+      position: fixed; bottom: 24px; left: 24px; z-index: 20;
+      padding: 16px 20px; border: 1px solid var(--border2); border-radius: 10px;
+      background: var(--surface); max-width: 360px;
+    }
+    #demo-panel .demo-panel-title { font-family: 'DM Serif Display', serif; font-size: 18px; margin-bottom: 8px; }
+    #demo-panel .demo-panel-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin-bottom: 10px; }
+    #demo-panel .demo-panel-desc p { margin: 0 0 8px; }
+    #demo-panel .demo-panel-desc p:last-child { margin-bottom: 0; }
+    #demo-panel .demo-panel-desc .demo-panel-note { font-size: 11px; color: var(--muted2); }
+    #demo-credit { font-size: 11px; color: var(--muted2); line-height: 1.5; }
+    #demo-credit a { color: var(--accent); }
+
+    #demo-loading {
+      position: fixed; inset: 0; z-index: 15;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; text-align: center; padding: 24px;
+      background: var(--bg);
+      font-family: 'DM Mono', monospace; font-size: 13px; color: var(--muted);
+    }
+    #demo-loading.hidden { display: none; }
+    #demo-loading .demo-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); }
+
+    #demo-error {
+      font-family: 'DM Mono', monospace; font-size: 13px; color: #ff8080; max-width: 440px;
+    }
+
+    #demo-hint {
+      position: fixed; bottom: 24px; right: 24px; z-index: 20;
+      font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted);
+    }
+    #demo-hint.hidden { display: none; }
+
+    #webcam-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      width: 100%;
+      margin-top: 4px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--accent);
+      background: transparent;
+      color: var(--accent);
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    #webcam-btn:hover { background: var(--accent); color: var(--bg); }
+    #webcam-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    #webcam-status {
+      font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted2);
+      margin-top: 6px;
+    }
+    #webcam-video { display: none; }
+
+    #landmark-overlay {
+      position: fixed; bottom: 60px; right: 24px; z-index: 20;
+      width: 200px; height: 150px; border-radius: 8px; border: 1px solid var(--border2);
+      background: #0c0c0e; transform: scaleX(-1); /* mirror, matches the piloted avatar */
+    }
+    #landmark-overlay.hidden { display: none; }
+
+    .toggle-row {
+      display: flex; align-items: center; gap: 6px; margin-top: 8px;
+      font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted);
+    }
+    .toggle-row.hidden { display: none; }
+
+    #model-select {
+      font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text);
+      background: var(--bg); border: 1px solid var(--border2); border-radius: 6px;
+      padding: 3px 6px; flex: 1;
+    }
+
+    #emotion-label, #perf-label, #emotion-debug {
+      position: fixed; top: 24px; right: 24px; z-index: 20;
+      font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted);
+      background: var(--surface); border: 1px solid var(--border2); border-radius: 8px;
+      padding: 8px 12px;
+    }
+    #perf-label { top: 68px; }
+    #emotion-debug {
+      top: 112px; max-width: 280px; white-space: pre-line; line-height: 1.6; font-size: 11px;
+    }
+    .side-label.hidden { display: none; }
+    #emotion-label.hidden { display: none; }
+
+    #gs-debug-overlay {
+      position: fixed; inset: 0; z-index: 10; pointer-events: none;
+    }
+    #gs-debug-overlay.hidden { display: none; }
+
+    @media (max-width: 640px) {
+      #avatar-container { bottom: 44vh; }
+      #demo-panel {
+        left: 12px; right: 12px; bottom: 12px; max-width: none;
+        max-height: 40vh; overflow-y: auto;
+      }
+      #demo-hint { display: none; }
+      /* #demo-panel covers the bottom-right corner on mobile (full-width,
+         same z-index, later in the DOM) — move the debug overlays into the
+         free area above it instead of letting them get hidden behind it. */
+      #landmark-overlay { top: 76px; right: 12px; bottom: auto; width: 140px; height: 105px; }
+      #perf-label { top: auto; bottom: calc(44vh + 12px); right: 12px; }
+      /* diagnostic-only readout, too dense for a small screen */
+      #emotion-debug { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <a id="demo-back" href="../../index.html#projets">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Retour au portfolio</span>
+  </a>
+
+  <div id="demo-loading">
+    <div class="demo-title">Chargement de l'avatar…</div>
+    <div>Gaussiennes 3D générées one-shot par LAM, téléchargement en cours</div>
+    <div id="demo-error"></div>
+  </div>
+
+  <div id="avatar-container"></div>
+  <canvas id="gs-debug-overlay" class="hidden"></canvas>
+  <video id="webcam-video" autoplay muted playsinline></video>
+  <canvas id="landmark-overlay" class="hidden"></canvas>
+
+  <div id="demo-panel" class="hidden">
+    <div class="demo-panel-title">Avatar gaussien animé</div>
+    <div class="demo-panel-desc">
+      <p>Avatar exemple généré one-shot depuis une photo par <b>LAM</b> (gaussiennes 3D embarquées sur FLAME), rendu en temps réel avec <code>LAM_WebRender</code> (WebGL) — génération et rendu ne sont pas de moi.</p>
+      <p>Ce que j'ai écrit ici, c'est la couche de <b>pilotage</b> : 
+        <ul>
+          <li>Capter les expressions via webcam (MediaPipe FaceLandmarker, tout local)</li>
+          <li>Les mapper sur le format attendu par LAM</li>
+          <li>Corriger deux bugs trouvés en lisant le bundle (lissage manquant, alias de nom de blendshape), et inverser gauche/droite pour un vrai effet miroir.</li>
+          <li>Orientation de la tête (tangage, lacet, roulis) pilotée via un paramètre non documenté de l'API de rendu, retrouvé par expérimentation puis <b>validé en direct</b> sur les 3 axes.</li>
+          <li>Estimation d'émotion (rire, sourire, surprise, tristesse, colère, froncement, bouche ouverte…) à partir des mêmes blendshapes captés, avec calibration automatique sur ton visage au repos (1s en début de session) pour zéro faux positif sur une posture neutre.</li>
+        </ul>
+      </p>
+      <p><p class="demo-panel-note">Note : le buste suit un peu la tête (poids de skinning du rig one-shot), d'où une rotation atténuée à 50%.</p>
+    </div>
+    <div id="model-select-row" class="toggle-row">
+      <label for="model-select">Avatar :</label>
+      <select id="model-select">
+        <option value="p2-1-example">Exemple LAM (p2-1)</option>
+        <option value="mbappe">mbappe</option>
+        <option value="mathis">mathis</option>
+      </select>
+    </div>
+    <button id="webcam-btn">Activer le pilotage webcam</button>
+    <div id="webcam-status"></div>
+    <div id="landmark-toggle-row" class="toggle-row hidden">
+      <input type="checkbox" id="landmark-toggle" />
+      <label for="landmark-toggle">Afficher les landmarks + marqueur de tête + FPS/latence (debug)</label>
+    </div>
+    <div id="emotion-label" class="side-label hidden"></div>
+    <div id="perf-label" class="side-label hidden"></div>
+    <div id="emotion-debug" class="side-label hidden"></div>
+    <div id="demo-credit">
+      <ul>
+        <li>Avatar &amp; rendu : <a href="https://aigc3d.github.io/projects/LAM/" target="_blank" rel="noopener noreferrer">LAM (SIGGRAPH 2025, aigc3d).</a></li>
+        <li>poids sous licence <a href="https://github.com/aigc3d/LAM/blob/master/LICENSE_WEIGHT" target="_blank" rel="noopener noreferrer">CC-BY-NC 4.0</a> usage non-commercial.</li>
+        <li>Renderer <a href="https://github.com/aigc3d/LAM_WebRender" target="_blank" rel="noopener noreferrer">LAM_WebRender</a> (MIT).</li>
+        <li>Pilotage webcam (mapping, miroir, lissage) : moi.</li>  
+      </ul>
+    </div>
+  </div>
+
+  <div id="demo-hint" class="hidden">glisser pour orbiter · molette pour zoomer</div>
+
+  <script type="importmap">
+{
+  "imports": {
+    "gaussian-splat-renderer-for-lam": "https://unpkg.com/gaussian-splat-renderer-for-lam@0.0.9-alpha.1/build/gaussian-splat-renderer-for-lam.module.js",
+    "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.mjs"
+  }
+}
+</script>
+  <script type="module" src="avatar-demo.js"></script>
+</body>
+
+</html>
