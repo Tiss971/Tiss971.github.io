@@ -4,6 +4,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>
+    try {
+      var t = localStorage.getItem('theme');
+      if (t) document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  </script>
   <meta name="description" content="Mathis Boston — Computer Graphics & 3D Vision Engineer. Research engineer skilled in Gaussian Splatting, NeRF, real-time rendering and AI-driven 3D pipelines." />
   <meta name="theme-color" content="#0c0c0e" />
   <meta property="og:title" content="Mathis Boston — Computer Graphics & 3D Vision Engineer" />
@@ -25,9 +31,6 @@
 <body>
 
   <a class="skip-link" href="#content">Skip to content</a>
-
-  <!-- 3D background -->
-  <div id="three-container"></div>
 
   <!-- Noise overlay -->
   <div id="noise"></div>
@@ -59,13 +62,10 @@
         <i class="nav-icon fa-solid fa-code"></i>
         <span class="nav-label" data-fr="Compétences" data-en="Stack">Compétences</span>
       </a>
-      <a href="#apropos" class="nav-item">
-        <i class="nav-icon fa-solid fa-circle-info"></i>
-        <span class="nav-label" data-fr="À propos" data-en="About me">À propos</span>
-      </a>
     </nav>
     <div id="sidebar-bottom">
       <!-- <a href="cv.pdf" class="resume-link mono" target="_blank">CV ↓</a> -->
+      <button id="theme-toggle" title="Toggle light/dark mode">☀️</button>
       <button id="lang-toggle">EN</button>
     </div>
   </aside>
@@ -86,7 +86,6 @@
         <span class="sep">·</span>
         <a href="https://www.linkedin.com/in/mathis-boston/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
       </div>
-      <div class="hero-scroll-hint mono">scroll ↓</div>
     </section>
 
     <!-- BIO -->
@@ -111,11 +110,11 @@
 
         <div class="entry">
           <div class="entry-meta">
-            <span class="entry-company">CEA — Laboratoire de Simulation Interactive</span>
-            <span class="entry-role mono" 
+            <span class="entry-company"><span class="org-logo"><img src="assets/logos/cea.svg" alt="CEA" /></span>CEA</span>
+            <span class="entry-role mono"
               data-fr="Ingénieur chercheur - Gaussian Splatting"
               data-en="Research Engineer - Gaussian Splatting"></span>
-            <span class="entry-date mono">Nov. 2023 — Nov. 2026</span>
+            <span class="entry-date mono">Nov. 2023 – Nov. 2026</span>
           </div>
           <div class="entry-desc">
             <p class="entry-short" data-fr="Expérience en Gaussian Splatting, développement 3DGS, segmentation, inpaiting, démontrateurs Laval Virtual, plugin Unity"
@@ -161,7 +160,7 @@
                 <div class="demo-sub mono">Voir sur LinkedIn ↗</div>
               </div>
             </a>
-            <a href="https://www.linkedin.com/posts/jeremie-legarrec_xdephysics-3dgs-unity3d-ugcPost-7251683023392313345" class="demo-card" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/posts/jeremie-legarrec_xdephysics-3dgs-unity3d-activity-7251683200022851584-4Rma" class="demo-card" target="_blank" rel="noopener noreferrer">
               <i class="fa-solid fa-video"></i>
               <div>
                 <div class="demo-title">Démonstrateur Laval Virtual 2024</div>
@@ -174,10 +173,10 @@
 
         <div class="entry">
           <div class="entry-meta">
-            <span class="entry-company">CEA — Laboratoire de Simulation Interactive</span>
+            <span class="entry-company"><span class="org-logo"><img src="assets/logos/cea.svg" alt="CEA" /></span>CEA</span>
             <span class="entry-role mono" data-fr="Ingénieur chercheur NeRF (Stage)"
               data-en="NeRF Research Engineer (Intern)">Ingénieur chercheur NeRF (Stage)</span>
-            <span class="entry-date mono">Févr. 2023 — Aoüt 2023</span>
+            <span class="entry-date mono">Févr. 2023 – Août 2023</span>
           </div>
           <div class="entry-desc">
             <p class="entry-short" data-fr="Experience en NeRF, vidéos 360, Unity VR"
@@ -198,10 +197,10 @@
 
         <div class="entry">
           <div class="entry-meta">
-            <span class="entry-company">Urbatis</span>
+            <span class="entry-company"><span class="org-badge urbatis">URB</span>Urbatis</span>
             <span class="entry-role mono" data-fr="FullStack & Modélisation" data-en="FullStack & Modeling">FullStack &
               Modélisation</span>
-            <span class="entry-date mono">Sept. 2021 — Févr. 2022</span>
+            <span class="entry-date mono">Sept. 2021 – Févr. 2022</span>
           </div>
           <div class="entry-desc">
             <p class="entry-short" data-fr="Experience en modélisation RSE, développement full-stack Vue.js, PHP, PostgreSQL"
@@ -221,7 +220,7 @@
 
         <div class="entry">
           <div class="entry-meta">
-            <span class="entry-company">SNCF — Technicentre Sud-Est Européen</span>
+            <span class="entry-company"><span class="org-logo"><img src="assets/logos/sncf.svg" alt="SNCF" /></span>SNCF · Technicentre Sud-Est Européen</span>
             <span class="entry-role mono" data-fr="Data Analyst (Stage)" data-en="Data Analyst (Intern)">Data Analyst
               (Stage)</span>
             <span class="entry-date mono">Janv. 2019</span>
@@ -307,16 +306,16 @@
       <div class="section-label mono"><span data-fr="Formation" data-en="Education">Formation</span></div>
       <div class="edu-grid">
         <div class="edu-item">
-          <span class="edu-school">UTC Compiègne</span>
-          <span class="edu-date mono">2020 — 2023</span>
-          <span class="edu-detail mono" data-fr="Diplôme d'ingénieur — Génie Informatique · IA & Data"
-            data-en="Engineering Degree — Computer Engineering · AI & Data">Diplôme d'ingénieur — Génie Informatique ·
+          <span class="edu-school"><span class="org-logo"><img src="assets/logos/utc.svg" alt="UTC" /></span>UTC Compiègne</span>
+          <span class="edu-date mono">2020 – 2023</span>
+          <span class="edu-detail mono" data-fr="Diplôme d'ingénieur · Génie Informatique · IA & Data"
+            data-en="Engineering Degree · Computer Engineering · AI & Data">Diplôme d'ingénieur · Génie Informatique ·
             IA & Data</span>
 
         </div>
         <div class="edu-item">
-          <span class="edu-school">UTC Compiègne</span>
-          <span class="edu-date mono">2018 — 2020</span>
+          <span class="edu-school"><span class="org-logo"><img src="assets/logos/utc.svg" alt="UTC" /></span>UTC Compiègne</span>
+          <span class="edu-date mono">2018 – 2020</span>
           <span class="edu-detail mono" data-fr="Cycle préparatoire" data-en="Preparatory Cycle">Cycle
             préparatoire</span>
 
@@ -367,40 +366,6 @@
       </div>
     </section>
 
-    <!-- ABOUT ME -->
-<section id="apropos" class="section reveal">
-  <div class="section-label mono"><span data-fr="À propos" data-en="About">À propos</span></div>
-  
-  <div class="apropos-grid">
-    
-    <div class="apropos-block">
-      <div class="apropos-block-label mono" data-fr="Langues" data-en="Languages">Langues</div>
-      <div class="hobbies-row">
-        <span class="hobby-item mono">
-          <span data-fr="Français" data-en="French">Français</span>
-          <span class="chip-level" data-fr="Langue Maternelle" data-en="Native">Langue Maternelle</span>
-        </span>
-        <span class="hobby-item mono">
-          <span data-fr="Anglais" data-en="English">Anglais</span>
-          <span class="chip-level" data-fr="Avancé" data-en="Advanced">Avancé</span>
-        </span>
-      </div>
-    </div>
-
-    <div class="apropos-sep"></div>
-
-    <div class="apropos-block">
-      <div class="apropos-block-label mono" data-fr="Intérêts" data-en="Hobbies">Intérêts</div>
-      <div class="hobbies-row">
-        <span class="hobby-item mono" data-fr="Basket (8 ans)" data-en="Basketball (8 years)">Basket (8 ans)</span>
-        <span class="hobby-item mono" data-fr="Course à pied" data-en="Running">Course à pied</span>
-        <span class="hobby-item mono" data-fr="Veille technologique" data-en="Tech watch">Veille technologique</span>
-        <span class="hobby-item mono" data-fr="Musique & histoire" data-en="Music & history">Musique</span>
-      </div>
-    </div>
-
-  </div>
-</section>
 
     <section id="dummy" class="section reveal" style="height: 400px;"></section>
 

@@ -2,34 +2,6 @@ import * as THREE from "three";
 import { SparkRenderer, SplatMesh } from "@sparkjsdev/spark";
 
 // =====================
-// BACKGROUND 3D SCENE
-// =====================
-const container = document.getElementById("three-container");
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-container.appendChild(renderer.domElement);
-
-const BackgroundScene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60,
-  window.innerWidth / window.innerHeight, 0.01, 1000
-);
-camera.position.z = 3;
-
-const spark = new SparkRenderer({ renderer });
-BackgroundScene.add(spark);
-
-const splat = new SplatMesh({ url: "./daisy.sog" });
-BackgroundScene.add(splat);
-
-renderer.setAnimationLoop((t) => {
-  const time = t * 0.001;
-  splat.position.x = Math.sin(time * 0.3) * 0.4;
-  splat.position.y = Math.cos(time * 0.2) * 0.2;
-  renderer.render(BackgroundScene, camera);
-});
-
-// =====================
 // AVATAR SCENE
 // =====================
 const avatarContainer = document.getElementById("avatar");
@@ -45,7 +17,7 @@ const avatarCamera = new THREE.PerspectiveCamera(60, 1, 0.01, 1000);
 const avatarSpark = new SparkRenderer({ renderer: avatarRenderer });
 avatarScene.add(avatarSpark);
 
-const avatarSplat = new SplatMesh({ url: "./flowers.sog" });
+const avatarSplat = new SplatMesh({ url: "./assets/gs/flowers.sog", lod: false });
 const avatarTarget = new THREE.Vector3(0, 0, 0);
 avatarSplat.rotation.x = Math.PI;
 avatarSplat.position.y = -0.5;
@@ -102,6 +74,27 @@ avatarRenderer.setAnimationLoop(() => {
 });
 
 // =====================
+// THEME TOGGLE
+// =====================
+const themeToggle = document.getElementById("theme-toggle");
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+let currentTheme = localStorage.getItem("theme") || (prefersDark ? "dark" : "light");
+
+const setTheme = (theme) => {
+  currentTheme = theme;
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+  themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+};
+
+themeToggle.addEventListener("click", () => {
+  setTheme(currentTheme === "dark" ? "light" : "dark");
+});
+
+// init theme
+setTheme(currentTheme);
+
+// =====================
 // LANGUAGE TOGGLE
 // =====================
 const toggle = document.getElementById("lang-toggle");
@@ -145,21 +138,13 @@ const navObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       navLinks.forEach(link => {
-        link.classList.toggle("active",
-          link.getAttribute("href") === `#${entry.target.id}`
-        );
+        const isActive = link.getAttribute("href") === `#${entry.target.id}`;
+        link.classList.toggle("active", isActive);
+        if (isActive) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
       });
     }
   });
 }, { threshold: 0.0, rootMargin: "-10% 0px -85% 0px" });
 
 sections.forEach(s => navObserver.observe(s));
-
-// =====================
-// RESIZE
-// =====================
-window.addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
