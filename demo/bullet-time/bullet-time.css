@@ -17,12 +17,21 @@
 #file { width: 100%; max-width: 270px; font-size: 12px; color: var(--muted); margin-top: 12px; }
 .bt-stage video, .bt-stage canvas { display: block; width: 100%; max-height: 65vh; object-fit: contain; background: #08090b; }
 .bt-preview-frame { position: relative; width: 100%; }
+.bt-mask-overlay { position: absolute; z-index: 2; pointer-events: auto; touch-action: none; cursor: crosshair; opacity: .58; }
 .bt-picker-overlay { position: absolute; inset: 0; display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; cursor: crosshair; touch-action: none; }
 .bt-picker-overlay:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
 .bt-pivot-marker { position: absolute; width: 34px; height: 34px; transform: translate(-50%, -50%); border: 2px solid #fff; border-radius: 50%; box-shadow: 0 0 0 2px #111, 0 0 14px #000b; pointer-events: none; }
 .bt-pivot-marker::before, .bt-pivot-marker::after { content: ''; position: absolute; top: 50%; left: 50%; background: #fff; box-shadow: 0 0 2px #000; transform: translate(-50%, -50%); }
 .bt-pivot-marker::before { width: 44px; height: 2px; }
 .bt-pivot-marker::after { width: 2px; height: 44px; }
+.bt-v2-tools { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--border2); }
+.bt-v2-tools h3 { margin: 0 0 8px; font-size: 14px; font-weight: 500; }
+.bt-experimental { color: var(--muted); font-size: 9px; font-weight: 400; text-transform: uppercase; letter-spacing: .08em; }
+.bt-v2-tools label { margin-top: 16px !important; }
+.bt-v2-tools input[type=range] { margin: 8px 0; }
+.bt-button-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.bt-button-row button { margin-top: 8px; }
+.bt-warning { padding: 10px; color: #f3c476; background: color-mix(in srgb, #f3c476 10%, transparent); border-radius: 6px; font-size: 11px; line-height: 1.55; }
 .bt-picker-instructions { margin: 0; padding: 10px 16px 0; color: var(--accent); font-size: 11px; line-height: 1.6; }
 .bt-caption { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; margin: 0; font-size: 11px; color: var(--muted); overflow-wrap: anywhere; }
 .bt-controls { padding: 22px; }

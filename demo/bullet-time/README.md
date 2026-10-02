@@ -12,6 +12,9 @@ The portfolio links to the same page. Drop/select a video, choose or suggest an
 instant, prepare the effect, then pick the subject in the original-frame preview.
 Choose a lateral move, a small arc or a diagonal approach, adjust its intensity,
 and export the silent video. The point can be reset to the image centre at any time.
+After the first preview, « Mouvement amplifié » opens an editable subject mask and
+an experimental layered reconstruction; the original single-surface movement
+remains available.
 
 ## Pipeline and limits
 
@@ -33,6 +36,17 @@ and export the silent video. The point can be reset to the image centre at any t
 - A contour-guidance refinement cleans the depth boundaries before surface
   construction, reducing foreground/background leakage around the selected subject.
   Its optional timing is shown with the other preparation timings.
+- The optional amplified mode seeds a connected depth mask at the chosen subject
+  point. Review it over the original frame, paint additions/removals, undo strokes
+  or reset to the automatic result, then build separate subject and background
+  layers from the retained RGB and refined depth. Mask edits do not rerun ONNX.
+- Background completion is local and deterministic, using visible scene patches.
+  The unfilled hidden core stays invalid; fine lines, text and large occlusions can
+  still expose missing pixels. The requested travel ranges from 1.0× to 2.0× and
+  is clamped against 60 sampled positions and a 1.25× crop limit. The UI reports
+  the retained travel and separate mask, background, layer and motion timings.
+  The motion validator has passed a 1.5× geometry pilot; automatic subject-mask
+  quality on the football clip, a full V2 export and a real phone remain unverified.
 - Suggestion scans small images at 8 Hz, scores activity and sharpness, and
   excludes half a second around unusually large changes. It is a heuristic and
   does not understand sporting events or perfectly distinguish pans from cuts.
@@ -72,11 +86,20 @@ source-frame parity across the insertion, silent 30 fps output, portrait export,
 file limits, invalid containers, missing WebCodecs, and WebM codec negotiation.
 The full parity check is intended for a 30 fps example video longer than 10 s.
 
-Validated on local headless Chrome with the supplied 848×480 football clip:
+The V1 was validated on local headless Chrome with the supplied 848×480 football clip:
 1027 output frames, 34.233 seconds, H.264, no audio. Both WebGPU and WASM inference
 passed; screenshots were inspected. Phone-sized layout is tested, but no real
 phone, Safari or Firefox has been tested. Timings are machine/cache-specific and
 are available in the UI and the generated reports; no memory peak is claimed.
+
+The V2 is published as experimental before full validation, at the user's request.
+An initial Chrome pilot reached 1.5× on all three paths, preserved known background
+pixels and exact endpoints, and passed the synthetic foreground colour test. Its
+automatic mask selected a region of the field rather than isolating a player;
+subject segmentation and visual acceptance remain unconfirmed. Full V2 export,
+editor interaction/cancellation coverage and real-phone testing remain pending.
+The local pilot harness is `python demo/bullet-time/validate-v2.py --clip "C:/path/example.mp4"`;
+use `--export` only after inspecting the pilot images.
 
 Model: [Depth Anything V2 Small ONNX](https://huggingface.co/onnx-community/depth-anything-v2-small)
 (Apache-2.0). Media API: [Mediabunny](https://mediabunny.dev/guide/quick-start).

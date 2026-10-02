@@ -43,6 +43,7 @@
         <div id="preview-wrap" hidden>
           <div class="bt-preview-frame">
             <canvas id="preview" aria-label="Aperçu de l’effet bullet time"></canvas>
+            <canvas id="mask-overlay" class="bt-mask-overlay" hidden tabindex="0" aria-label="Masque du sujet : zones colorées incluses dans le sujet"></canvas>
             <button id="pivot-overlay" class="bt-picker-overlay" type="button" hidden aria-label="Choisir le centre du mouvement dans l’image. Entrée ou Espace choisit le centre de l’image." aria-keyshortcuts="Enter Space">
               <span id="pivot-marker" class="bt-pivot-marker" aria-hidden="true"></span>
             </button>
@@ -75,6 +76,36 @@
         <p class="bt-note">Prépare l’effet, puis choisis le point de vue sur l’image d’origine.</p>
         <button id="prepare" type="button" class="bt-primary" disabled>Voir l’effet</button>
         <button id="generate" type="button" class="bt-primary" disabled>Générer la vidéo muette</button>
+        <section id="v2-tools" class="bt-v2-tools" hidden aria-labelledby="v2-title">
+          <h3 id="v2-title">Mouvement amplifié <span class="bt-experimental">expérimental</span></h3>
+          <p id="v2-description" class="bt-note">Prépare un masque du sujet pour essayer un déplacement plus ample. Le fond révélé reste une approximation.</p>
+          <button id="v2-enable" type="button" class="bt-secondary" disabled>Préparer le masque du sujet</button>
+          <div id="v2-editor" hidden>
+            <p class="bt-note">Vérifie la zone bleue sur l’image d’origine, puis ajoute ou retire des zones au pinceau.</p>
+            <label for="mask-brush">Pinceau</label>
+            <select id="mask-brush" aria-label="Action du pinceau">
+              <option value="add">Ajouter au sujet</option>
+              <option value="remove">Retirer du sujet</option>
+            </select>
+            <label for="mask-size">Taille du pinceau <output id="mask-size-label" for="mask-size">5 %</output></label>
+            <input id="mask-size" type="range" min="1" max="12" value="5" />
+            <div class="bt-button-row">
+              <button id="mask-undo" type="button" class="bt-secondary" disabled>Annuler le trait</button>
+              <button id="mask-reset" type="button" class="bt-secondary" disabled>Réinitialiser</button>
+            </div>
+            <button id="v2-build" type="button" class="bt-primary">Construire les couches</button>
+            <button id="v2-abandon" type="button" class="bt-secondary">Revenir au mouvement initial</button>
+          </div>
+          <div id="v2-motion" hidden>
+            <label for="amplitude">Amplitude demandée <output id="amplitude-label" for="amplitude">100 %</output></label>
+            <input id="amplitude" type="range" min="100" max="200" value="150" step="10" />
+            <p id="effective-amplitude" class="bt-note" aria-live="polite">Amplitude retenue : 1,5×</p>
+            <button id="v2-edit" type="button" class="bt-secondary">Modifier le masque</button>
+            <button id="v2-use" type="button" class="bt-secondary" hidden>Réactiver le mouvement amplifié</button>
+            <button id="v2-v1" type="button" class="bt-secondary">Revenir au mouvement initial</button>
+            <p id="v2-fallback" class="bt-warning" hidden></p>
+          </div>
+        </section>
         <button id="cancel" type="button" class="bt-secondary" hidden>Annuler</button>
         <a id="download" class="bt-primary" hidden download>Télécharger la vidéo</a>
         <label class="bt-change" for="file">Choisir une autre vidéo</label>
