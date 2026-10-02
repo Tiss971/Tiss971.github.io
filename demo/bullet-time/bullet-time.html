@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Fige un instant de ta vidéo et ajoute un mouvement de caméra en 3D, entièrement dans ton navigateur." />
+  <title>Bullet time — Mathis Boston</title>
+  <script>try { const t = localStorage.getItem('theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch {}</script>
+  <link rel="stylesheet" href="../../style.css" />
+  <link rel="stylesheet" href="bullet-time.css" />
+  <script type="importmap">
+  { "imports": {
+    "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.180.0/three.module.js",
+    "@sparkjsdev/spark": "https://sparkjs.dev/releases/spark/2.0.0/spark.module.js",
+    "mediabunny": "https://cdn.jsdelivr.net/npm/mediabunny@1.61.0/+esm"
+  } }
+  </script>
+</head>
+<body>
+  <main class="bt-shell">
+    <header class="bt-header">
+      <a href="../../index.html#projets" class="mono bt-back">← Portfolio</a>
+      <span class="mono bt-local">Traitement local · Vidéo privée</span>
+    </header>
+    <div class="bt-intro">
+      <p class="mono bt-eyebrow">UNE VIDÉO. UN INSTANT. UN AUTRE ANGLE.</p>
+      <h1>Arrête le temps.</h1>
+      <p>Choisis un instant. La caméra se déplace pendant deux secondes, puis l’action reprend.</p>
+    </div>
+    <section class="bt-layout" aria-label="Création de la vidéo">
+      <div class="bt-stage">
+        <label id="drop-zone" class="bt-drop" for="file">
+          <span class="bt-drop-icon" aria-hidden="true">↥</span>
+          <strong>Dépose ta vidéo ici</strong>
+          <span>ou choisis un fichier</span>
+          <small>60 secondes · 100 Mo maximum</small>
+          <input id="file" type="file" accept="video/*,.mp4,.webm,.mov,.mkv" />
+        </label>
+        <div id="source-wrap" hidden>
+          <video id="source" controls muted playsinline preload="metadata" aria-label="Vidéo originale"></video>
+          <p class="bt-caption"><span id="file-name"></span><span id="metadata"></span></p>
+        </div>
+        <div id="preview-wrap" hidden>
+          <div class="bt-preview-frame">
+            <canvas id="preview" aria-label="Aperçu de l’effet bullet time"></canvas>
+            <button id="pivot-overlay" class="bt-picker-overlay" type="button" hidden aria-label="Choisir le centre du mouvement dans l’image. Entrée ou Espace choisit le centre de l’image." aria-keyshortcuts="Enter Space">
+              <span id="pivot-marker" class="bt-pivot-marker" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p id="pivot-instructions" class="bt-picker-instructions" hidden>Clique ou touche le sujet. Entrée ou Espace choisit le centre de l’image ; Échap annule.</p>
+          <p class="bt-caption">Aperçu · mouvement de caméra de 2 secondes <button id="replay" type="button">↻ Rejouer</button></p>
+        </div>
+        <div id="result-wrap" hidden>
+          <video id="result" controls muted playsinline aria-label="Vidéo finale muette"></video>
+          <p class="bt-caption">Ta vidéo est prête <span id="result-info"></span></p>
+        </div>
+      </div>
+      <aside class="bt-controls">
+        <h2>L’instant décisif</h2>
+        <label for="timestamp">Instant choisi <output id="time-label" for="timestamp">0,00 s</output></label>
+        <input id="timestamp" type="range" min="0" max="0" value="0" step="0.0333333333" disabled />
+        <button id="suggest" type="button" class="bt-secondary" disabled>✦ Suggérer un moment</button>
+        <label for="trajectory">Trajectoire</label>
+        <select id="trajectory" disabled>
+          <option value="lateral" selected>Latéral</option>
+          <option value="arc">Petit arc</option>
+          <option value="dolly">Approche diagonale</option>
+        </select>
+        <label for="intensity">Mouvement <output id="intensity-label" for="intensity">35 %</output></label>
+        <input id="intensity" type="range" min="0" max="100" value="35" disabled />
+        <p class="bt-note">Un mouvement léger garde les contours plus naturels.</p>
+        <p class="bt-pivot-label">Centre du mouvement <output id="pivot-label" data-u="0.5" data-v="0.5">Centre</output></p>
+        <button id="pivot-pick" type="button" class="bt-secondary" disabled>Choisir le sujet</button>
+        <button id="pivot-reset" type="button" class="bt-secondary" disabled>Recentrer sur le milieu</button>
+        <p class="bt-note">Prépare l’effet, puis choisis le point de vue sur l’image d’origine.</p>
+        <button id="prepare" type="button" class="bt-primary" disabled>Voir l’effet</button>
+        <button id="generate" type="button" class="bt-primary" disabled>Générer la vidéo muette</button>
+        <button id="cancel" type="button" class="bt-secondary" hidden>Annuler</button>
+        <a id="download" class="bt-primary" hidden download>Télécharger la vidéo</a>
+        <label class="bt-change" for="file">Choisir une autre vidéo</label>
+        <div class="bt-feedback">
+          <p id="status" role="status" aria-live="polite">Le modèle est téléchargé au premier aperçu. Ta vidéo reste sur ton appareil.</p>
+          <progress id="progress" max="100" value="0" hidden aria-label="Progression du traitement"></progress>
+          <p id="error" role="alert"></p>
+          <details id="timing-wrap" hidden><summary>Temps de traitement</summary><pre id="timings"></pre></details>
+        </div>
+      </aside>
+    </section>
+    <footer class="bt-footer">RGB + profondeur → splats de surface → vidéo. Une parallaxe courte à partir d’une seule image.</footer>
+  </main>
+  <script type="module" src="app.js" onerror="document.getElementById('error').textContent='Impossible de charger la démo. Vérifie ta connexion et l’accès aux dépendances publiques.'"></script>
+</body>
+</html>
